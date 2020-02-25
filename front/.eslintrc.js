@@ -6,7 +6,7 @@ module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        // "airbnb-base",
+        // "airbnb-base"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -23,8 +23,6 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "semi": ["error", "always"],
-        "quotes": ["error", "single"],
         "no-console": 1
     }
 };
