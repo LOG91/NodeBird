@@ -1,11 +1,10 @@
-import { AppLayout } from '../components/AppLayout';
+import React from 'react';
 
 const Profile = () => {
+
   return (
     <>
-      <AppLayout>
         <div>Hello Profile</div>
-      </AppLayout>
     </>
   )
 };
