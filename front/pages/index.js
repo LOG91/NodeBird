@@ -1,17 +1,32 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import Link from 'next/link';
-import { AppLayout } from '../components/AppLayout';
-// import '../node_modules/antd/dist/antd.css';
-// import 'antd/dist/antd.css';
-import Head from 'next/head';
+import { PostForm } from '../components/PostForm';
+import { PostCard } from '../components/PostCard';
+
+const dummy = {
+  isLoggedIn: true,
+  imagePaths: [],
+  mainPosts: [{
+    User: {
+      id: 1,
+      nickname: 'whale',
+    },
+    content: '첫 번째 게시글',
+    img: 'https://cdn.mos.cms.futurecdn.net/3PPyiDpC8wHbCSB6ZnAWLL.jpg'
+  }]
+};
 
 const Home = () => {
-  
+
   return (
-    <>
-        <div>Hello NodeBird</div>
-    </>
+    <div>
+      {dummy.isLoggedIn &&
+        PostForm({ imagePaths: dummy.imagePaths })}
+      {dummy.mainPosts.map((c) => {
+        return (
+          <PostCard key={c.User.id} post={c} />
+        )
+      })}
+    </div>
   );
 };
 

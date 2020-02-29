@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, Checkbox } from 'antd';
 
 // custom hook
-const useInput = (initValue) => {
+export const useInput = (initValue) => {
   const [value, setter] = useState(initValue);
   const handler = useCallback((e) => {
     setter(e.target.value);
