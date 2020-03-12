@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../../reducers/user';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import { useInput } from '../../pages/signup';
@@ -6,12 +8,15 @@ import { useInput } from '../../pages/signup';
 const LoginForm = () => {
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
-  const onSubmit = (e) => {
+  const dispatch = useDispatch();
+
+  const onSubmit = useCallback((e) => {
+    dispatch(loginAction);
     e.preventDefault();
-    console.log({ id, password })
-  }
+  }, [id, password]);
+
   return (
-    <Form onSubmit={onSubmit} style={{padding: "10px"}}>
+    <Form onSubmit={onSubmit} style={{ padding: "10px" }}>
       <div>
         <label htmlFor="user-id">아이디</label>
         <br />

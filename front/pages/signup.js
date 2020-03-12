@@ -1,4 +1,6 @@
 import React, { useState, useCallback, memo } from 'react';
+import { useDispatch } from 'react-redux';
+import { signupAction } from '../reducers/user';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Checkbox } from 'antd';
 
@@ -22,6 +24,8 @@ const TextInput = memo(({ name, labelValue, value, onChange }) => {
 });
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+
   const [passwordCheck, setPasswordCheck] = useState('');
   const [term, setTerm] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -44,6 +48,7 @@ const SignUp = () => {
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     setTermError(!term);
+    dispatch(signupAction({ id, password, nickname }))
     console.log({ id, nickname, password, passwordCheck, term });
   }, [term]);
 
@@ -82,7 +87,7 @@ const SignUp = () => {
 };
 
 SignUp.proptypes = {
-  
+
 }
 
 
