@@ -4,9 +4,9 @@ module.exports = {
         "es6": true
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        // "airbnb-base"
+        // "eslint:recommended",
+        // "plugin:react/recommended",
+        "airbnb"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -23,6 +23,7 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "no-console": 1
+        "no-console": 1,
+        "object-curly-newline": 0
     }
 };

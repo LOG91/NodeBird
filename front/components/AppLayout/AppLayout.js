@@ -21,7 +21,7 @@ const AppLayout = ({ children }) => {
       <Link href="/signup"><button>회원가입</button></Link>
       <Row gutter={10}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile user={user} /> : <LoginForm />}
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

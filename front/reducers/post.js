@@ -1,5 +1,4 @@
-const initialState = {
-  imagePaths: [],
+export const initialState = {
   mainPosts: [{
     User: {
       id: 1,
@@ -7,42 +6,72 @@ const initialState = {
     },
     content: '첫 번째 게시글',
     img: 'https://cdn.mos.cms.futurecdn.net/3PPyiDpC8wHbCSB6ZnAWLL.jpg'
-  }]
+  }], // 화면에 보일 포스트
+  imagePaths: [], // 미리보기 이미지 경로
+  addPostErrorReason: false, // 포스트 업로드 실패 사유
+  isAddingPost: false, // 포스트 업로드중
 };
 
-const ADD_POST = 'ADD_POST';
-const ADD_DUMMY = 'ADD_DUMMY';
+const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
+const LOAD_MAIN_POSTS_SUCCESS = 'LOAD_MAIN_POSTS_SUCCESS';
+const LOAD_MAIN_POSTS_FAILURE = 'LOAD_MAIN_POSTS_FAILURE';
 
-const addPost = () => ({
-  type: ADD_POST
-});
+const LOAD_HASHTAG_POSTS_REQUEST = 'LOAD_HASHTAG_POSTS_REQUEST';
+const LOAD_HASHTAG_POSTS_SUCCESS = 'LOAD_HASHTAG_POSTS_SUCCESS';
+const LOAD_HASHTAG_POSTS_FAILURE = 'LOAD_HASHTAG_POSTS_FAILURE';
 
-const addDummy = () => ({
-  type: ADD_DUMMY,
-  data: {
-    content: 'Hello',
-    UserId: 1,
-    User: {
-      nickname: 'seokki'
-    }
-  }
-});
+const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
+const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
+const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';
+
+const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+
+const REMOVE_IMAGE = 'REMOVE_IMAGE';
+
+const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
+const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
+const ROAD_COMMENTS_REQUEST = 'ROAD_COMMENTS_REQUEST';
+const ROAD_COMMENTS_SUCCESS = 'ROAD_COMMENTS_SUCCESS';
+const ROAD_COMMENTS_FAILURE = 'ROAD_COMMENTS_FAILURE';
+
+const RETWEET_REQUEST = 'RETWEET_REQUEST';
+const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+const RETWEET_FAILURE = 'RETWEET_FAILURE';
+
+const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+
+// 포스트 수정 기능은 숙제!
+//
+//
+
+const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POST:
-      return {
-        ...state
-      }
-    case ADD_DUMMY:
+    case ADD_POST_REQUEST:
       return {
         ...state,
-        mainPosts: [action.data, ...state.mainPosts]
-      }
+      };
     default:
       return state;
   }
-}
+};
 
 export default reducer;

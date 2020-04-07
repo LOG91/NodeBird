@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from 'react';
 import { useDispatch } from 'react-redux';
-import { signupAction } from '../reducers/user';
+// import { signupAction } from '../reducers/user';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Checkbox } from 'antd';
 
@@ -48,7 +48,7 @@ const SignUp = () => {
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     setTermError(!term);
-    dispatch(signupAction({ id, password, nickname }))
+    // dispatch(signupAction({ id, password, nickname }))
     console.log({ id, nickname, password, passwordCheck, term });
   }, [term]);
 

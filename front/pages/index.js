@@ -10,13 +10,9 @@ const Home = () => {
   const { user, isLoggedIn } = useSelector(state => state.user);
   const { imagePaths, mainPosts } = useSelector(state => state.post);
   useEffect(() => {
-    // dispatch({
-    //   type: "LOG_IN",
-    //   data: {
-    //     nickname: '제로초'
-    //   }
-    // })
-    // dispatch(loginAction);
+    dispatch({ type: 'HELLO_SAGA' })
+    dispatch({ type: 'HELLO_SAGA' })
+    dispatch({ type: 'HELLO_SAGA' })
   }, []);
 
   return (
