@@ -1,5 +1,6 @@
-import React, { useState, useCallback, memo } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useCallback, memo, useEffect } from 'react';
+import Router from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 // import { signupAction } from '../reducers/user';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Checkbox } from 'antd';
@@ -25,6 +26,7 @@ const TextInput = memo(({ name, labelValue, value, onChange }) => {
 
 const SignUp = () => {
   const dispatch = useDispatch();
+  const { me, isSigningUp } = useSelector((state) => state.user);
 
   const [passwordCheck, setPasswordCheck] = useState('');
   const [term, setTerm] = useState(false);
@@ -34,6 +36,13 @@ const SignUp = () => {
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
+
+  useEffect(() => {
+    if (me) {
+      alert('로그인되어 루트창으로 이동합니데이');
+      Router.push('/');
+    }
+  }, [me && me.id]);
 
   const onChangePasswordCheck = useCallback((e) => {
     setPasswordCheck(e.target.value);
@@ -48,7 +57,7 @@ const SignUp = () => {
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     setTermError(!term);
-    // dispatch(signupAction({ id, password, nickname }))
+    dispatch({ type: 'SIGN_UP_REQUEST', id, password, nickname });
     console.log({ id, nickname, password, passwordCheck, term });
   }, [term]);
 
@@ -78,7 +87,7 @@ const SignUp = () => {
           <Checkbox name="user-term" onChange={onChangeTerm}>제로초님의 말에 동의합니까?</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">가입하기</Button>
+          <Button type="primary" htmlType="submit" loading={isSigningUp}>가입하기</Button>
           {termError ? <div style={{ color: 'red' }}>약관에 동의하셔야 합니다</div> : null}
         </Form.Item>
       </Form>

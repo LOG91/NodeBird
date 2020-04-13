@@ -10,6 +10,15 @@ export const initialState = {
   imagePaths: [], // 미리보기 이미지 경로
   addPostErrorReason: false, // 포스트 업로드 실패 사유
   isAddingPost: false, // 포스트 업로드중
+  postAdded: false,
+};
+
+const dummyPost = {
+  User: {
+    id: 1,
+    nickname: 'whale',
+  },
+  content: '나는 더미입니다.',
 };
 
 const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
@@ -38,9 +47,9 @@ const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
 const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
 const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
 
-const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
-const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
-const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 const ROAD_COMMENTS_REQUEST = 'ROAD_COMMENTS_REQUEST';
 const ROAD_COMMENTS_SUCCESS = 'ROAD_COMMENTS_SUCCESS';
@@ -58,9 +67,9 @@ const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 //
 //
 
-const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
-const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
-const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 
 const reducer = (state = initialState, action) => {
@@ -68,6 +77,22 @@ const reducer = (state = initialState, action) => {
     case ADD_POST_REQUEST:
       return {
         ...state,
+        isAddingPost: true,
+        addPostErrorReason: '',
+        postAdded: false,
+      };
+    case ADD_POST_SUCCESS:
+      return {
+        ...state,
+        isAddingPost: false,
+        mainPosts: [dummyPost, ...state.mainPosts],
+        postAdded: true,
+      };
+    case ADD_POST_FAILURE:
+      return {
+        ...state,
+        isAddingPost: false,
+        addPostErrorReason: action.error,
       };
     default:
       return state;

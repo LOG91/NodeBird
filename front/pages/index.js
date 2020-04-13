@@ -8,7 +8,7 @@ import { loginAction } from '../reducers/user';
 const Home = () => {
   const dispatch = useDispatch();
   const { user, isLoggedIn } = useSelector(state => state.user);
-  const { imagePaths, mainPosts } = useSelector(state => state.post);
+  const { mainPosts } = useSelector(state => state.post);
   useEffect(() => {
     dispatch({ type: 'HELLO_SAGA' })
     dispatch({ type: 'HELLO_SAGA' })
@@ -19,7 +19,7 @@ const Home = () => {
     <div>
       {user ? (<div>로그인 했습니다 id: {user.nickname}</div>) : <div>로그아웃 했습니다</div>}
       {isLoggedIn &&
-        PostForm({ imagePaths })}
+        <PostForm />}
       {mainPosts.map((c) => {
         return (
           <PostCard key={c.User.id} post={c} />

@@ -24,6 +24,31 @@ function* login() {
   }
 }
 
+function signUpAPI() {
+  // 서버에 요청을 보내는 부분
+  return axios.post('/login');
+}
+
+function* signUp() {
+  try {
+    // yield call(signUpAPI); // call은 동기적 요청, fork는 비동기적 요청
+    yield delay(2000);
+    throw new Error('에러에러에러');
+    yield put({ // put은 dispatch와 동일
+      type: SIGN_UP_SUCCESS,
+    });
+  } catch (e) { // loginAPI 실패
+    console.error(e);
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: e
+    });
+  }
+}
+
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
+}
 
 function* watchLogin() { // watch하고 있던 액션이 들어오면 signUp함수를 실행시킨다
   yield takeLatest(LOG_IN_REQUEST, login);
@@ -47,7 +72,7 @@ function* helloSaga() {
 export default function* userSaga() {
   yield all([
     fork(helloSaga),
-    // fork(watchHello),
+    fork(watchSignUp),
     fork(watchLogin),
   ]);
 }
