@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card, Icon, Button, Avatar, Form, Input, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ const PostCard = ({ post }) => {
   const [commentFormOpend, setCommentFormOpend] = useState(false);
   const [commentText, setCommentText] = useState('');
   const { me } = useSelector(state => state.user);
+  const { commentAdded, isAddingComment } = useSelector(state => state.post);
   const dispatch = useDispatch();
 
   const onToggleComment = useCallback(() => {
@@ -17,8 +18,17 @@ const PostCard = ({ post }) => {
   const onSubmitComment = useCallback((e) => {
     e.preventDefault();
     if (!me) return alert('로그인이 필요합니다');
-    return dispatch({ type: ADD_COMMENT_REQUEST });
-  }, []);
+    return dispatch({
+      type: ADD_COMMENT_REQUEST,
+      data: {
+        postId: post.id,
+      },
+    });
+  }, [me && me.id]);
+
+  useEffect(() => {
+    setCommentText('');
+  }, [commentAdded === true]);
 
   const onChangeCommentText = useCallback((e) => {
     setCommentText(e.target.value);
@@ -49,21 +59,23 @@ const PostCard = ({ post }) => {
             <Form.Item>
               <Input.TextArea rows={4} value={commentText} onChange={onChangeCommentText} />
             </Form.Item>
-            <Button type="primary" htmlType="submit">삐약</Button>
+            <Button type="primary" htmlType="submit" loading={isAddingComment}>삐약</Button>
             <List
               header={`${post.Comments ? post.Comments.length : 0} 댓글`}
               itemLayout="horizontal"
-              dataSource={post.Comment || []}
-              renderItem={item => (
-                <li>
-                  <Comment
-                    author={item.User.nickname}
-                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
-                    content={item.content}
-                    datetime={item.createAt}
-                  />
-                </li>
-              )}
+              dataSource={post.Comments || []}
+              renderItem={item => {
+                return (
+                  <li>
+                    <Comment
+                      author={item.User.nickname}
+                      avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                      content={item.content}
+                    // datetime={item.createAt}
+                    />
+                  </li>
+                )
+              }}
             />
           </Form>
         </>
