@@ -1,9 +1,9 @@
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-// import { signupAction } from '../reducers/user';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Checkbox } from 'antd';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 
 // custom hook
 export const useInput = (initValue) => {
@@ -57,9 +57,15 @@ const SignUp = () => {
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     setTermError(!term);
-    dispatch({ type: 'SIGN_UP_REQUEST', id, password, nickname });
-    console.log({ id, nickname, password, passwordCheck, term });
-  }, [term]);
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: {
+        userId: id,
+        password,
+        nickname
+      }
+    });
+  }, [id, nickname, password, passwordCheck, term]);
 
   return (
     <>

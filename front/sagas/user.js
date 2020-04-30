@@ -24,16 +24,15 @@ function* login() {
   }
 }
 
-function signUpAPI() {
+function signUpAPI(signUpData) {
   // 서버에 요청을 보내는 부분
-  return axios.post('/login');
+  return axios.post('http://localhost:3065/api/user', signUpData);
 }
 
-function* signUp() {
+function* signUp(action) {
   try {
     // yield call(signUpAPI); // call은 동기적 요청, fork는 비동기적 요청
-    yield delay(2000);
-    throw new Error('에러에러에러');
+    yield call(signUpAPI, action.data);
     yield put({ // put은 dispatch와 동일
       type: SIGN_UP_SUCCESS,
     });

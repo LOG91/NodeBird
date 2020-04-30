@@ -18,13 +18,13 @@ router.post('/', async (req, res, next) => { // 회원가입
       return res.status(403).send('이미 사용중인 ID입니다.');
     }
 
-    const hashedPassword = bcrypt.hash(req.body.password, 12); // 10 - 13 수준이 적정 너무 높으면 성능 문제 발생
+    const hashedPassword = await bcrypt.hash(req.body.password, 12); // 10 - 13 수준이 적정 너무 높으면 성능 문제 발생
     const newUser = await db.User.create({
       nickname: req.body.nickname,
       userId: req.body.userId,
       password: hashedPassword,
     });
-    console.log(newUser);
+    // console.log(newUser);
     return res.status(200).json(newUser);
   }
   catch (e) {
