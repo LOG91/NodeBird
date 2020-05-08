@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
+const passport = require('passport');
+const passportConfig = require('./passport');
 
 const db = require('./models');
 const userApiRouter = require('./routes/user');
@@ -13,6 +15,7 @@ const postApiRouter = require('./routes/post');
 dotenv.config();
 const app = express();
 db.sequelize.sync();
+passportConfig();
 
 app.use(cors());
 app.use(morgan('dev'));
@@ -25,8 +28,11 @@ app.use(expressSession({
     httpOnly: true, // js로 쿠키에 접근하지 못 하도록 막는다, 보안을 위함
     secure: false, // https사용할 때 true로 변경
   }
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // expressSession을 내부적으로 사용하기 때문에 반드시 더 아래에 코드를 적어야 한다
 
-}))
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

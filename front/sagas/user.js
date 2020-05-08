@@ -2,19 +2,21 @@ import axios from 'axios';
 import { all, delay, call, put, fork, takeLatest, takeEvery, take } from 'redux-saga/effects';
 import { LOG_IN_REQUEST, LOG_IN_FAILURE, LOG_IN_SUCCESS, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from '../reducers/user';
 
-function loginAPI() {
+axios.defaults.baseURL = 'http://localhost:3065/api';
+
+function loginAPI(loginData) {
   // 서버에 요청을 보내는 부분
-  return axios.post('/login');
+  return axios.post('/user/login', loginData);
 }
 
 const HELLO_SAGA = 'HELLO_SAGA';
 
-function* login() {
+function* login(action) {
   try {
-    // yield call(loginAPI); // call은 동기적 요청, fork는 비동기적 요청
-    yield delay(2000); // 아직 로그인API
+    const result = yield call(loginAPI, action.data); // call은 동기적 요청, fork는 비동기적 요청
     yield put({ // put은 dispatch와 동일
       type: LOG_IN_SUCCESS,
+      data: result.data,
     });
   } catch (e) { // loginAPI 실패
     console.error(e);
@@ -26,7 +28,7 @@ function* login() {
 
 function signUpAPI(signUpData) {
   // 서버에 요청을 보내는 부분
-  return axios.post('http://localhost:3065/api/user', signUpData);
+  return axios.post('/user', signUpData);
 }
 
 function* signUp(action) {
