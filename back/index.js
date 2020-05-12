@@ -17,7 +17,10 @@ const app = express();
 db.sequelize.sync();
 passportConfig();
 
-app.use(cors());
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 app.use(morgan('dev'));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(expressSession({
@@ -27,7 +30,8 @@ app.use(expressSession({
   cookie: {
     httpOnly: true, // js로 쿠키에 접근하지 못 하도록 막는다, 보안을 위함
     secure: false, // https사용할 때 true로 변경
-  }
+  },
+  name: 'whaleck'
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // expressSession을 내부적으로 사용하기 때문에 반드시 더 아래에 코드를 적어야 한다

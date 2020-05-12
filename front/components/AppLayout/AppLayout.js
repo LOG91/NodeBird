@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Menu, Input, Row, Col, Card, Avatar, Form, Button } from 'antd';
 import Link from 'next/link';
@@ -8,7 +8,15 @@ import { UserProfile } from '../UserProfile';
 
 
 const AppLayout = ({ children }) => {
-  const { user, isLoggedIn } = useSelector(state => state.user);
+  const { me, isLoggedIn } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!me) {
+      dispatch({
+        type: 'LOAD_USER_REQUEST',
+      });
+    }
+  }, [])
   return (
     <div>
       <Menu mode="horizontal">
@@ -21,7 +29,7 @@ const AppLayout = ({ children }) => {
       <Link href="/signup"><button>회원가입</button></Link>
       <Row gutter={10}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}
