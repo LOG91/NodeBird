@@ -15,13 +15,17 @@ const PostForm = () => {
 
   const onSubmitForm = useCallback((e) => {
     e.preventDefault();
+    if (!text || !text.trim()) {
+      return alert('게시글이 빈칸입니다.');
+      setText('');
+    }
     dispatch({
       type: ADD_POST_REQUEST,
       data: {
-        text,
+        content: text,
       },
     });
-  }, []);
+  }, [text]);
 
   const onChangeText = useCallback((e) => {
     setText(e.target.value);
