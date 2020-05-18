@@ -13,6 +13,7 @@ import {
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  HELLO_SAGA,
 } from '../reducers/user';
 
 function logInAPI(loginData) {
@@ -20,7 +21,7 @@ function logInAPI(loginData) {
   return axios.post('/user/login', loginData, { withCredentials: true });
 }
 
-const HELLO_SAGA = 'HELLO_SAGA';
+// const HELLO_SAGA = 'HELLO_SAGA';
 
 function* logIn(action) {
   try {
@@ -91,18 +92,19 @@ function* watchLogOut() {
   yield takeLatest(LOG_OUT_REQUEST, logOut);
 }
 
-function loadUserAPI() {
-  return axios.get('/user', { withCredentials: true });
+function loadUserAPI(userId) {
+  return axios.get(userId ? `/user/${userId}` : '/user/', { withCredentials: true });
 }
 
-function* loadUser() {
+function* loadUser(action) {
   try {
     // yield call(loadUserAPI); // call은 동기적 요청, fork는 비동기적 요청
-    const result = yield call(loadUserAPI);
+    const result = yield call(loadUserAPI, action.data);
     console.log(result);
     yield put({ // put은 dispatch와 동일
       type: LOAD_USER_SUCCESS,
-      data: result.data
+      data: result.data,
+      me: !action.data,
     });
   } catch (e) { // loginAPI 실패
     console.error(e);
@@ -114,7 +116,7 @@ function* loadUser() {
 }
 
 function* watchLoadUser() {
-  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+  yield takeEvery(LOAD_USER_REQUEST, loadUser);
 }
 
 // function* watchHello() {
@@ -128,7 +130,7 @@ function* watchLoadUser() {
 
 function* helloSaga() {
   console.log('before saga');
-  yield take(HELLO_SAGA);
+  yield put({ type: HELLO_SAGA });
   console.log('hello saga');
 }
 

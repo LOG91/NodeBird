@@ -1,4 +1,3 @@
-  
 module.exports = (sequelize, DataTypes) => {
   const Post = sequelize.define('Post', { // 테이블명은 posts
     content: {

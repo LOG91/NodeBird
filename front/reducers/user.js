@@ -1,12 +1,3 @@
-const dummyUser = {
-  name: 'Seokki Oh',
-  nickname: 'seokki',
-  age: 30,
-  Post: [1, 2, 3],
-  Followings: [1, 2, 3, 12, 3, 12, 412, 4, 1, 2, 41],
-  Followers: [1, 2, 3, 123, 12, 312, 3, 12, 4, 2, 2, 2, 2, 1, 12, 1, 12, 12],
-};
-
 export const initialState = {
   isLoggedIn: false, // 로그인 여부
   isLoggingOut: false, // 로그아웃 시도중
@@ -20,6 +11,8 @@ export const initialState = {
   followerList: [], // 팔로워 리스트
   userInfo: null, // 남의 정보
 };
+
+export const HELLO_SAGA = 'HELLO_SAGA';
 
 export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
@@ -76,6 +69,10 @@ export const signupRequestAction = (data) => ({
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case HELLO_SAGA :
+      return {
+        ...state
+      }
     case LOG_IN_REQUEST:
       return {
         ...state,
@@ -121,9 +118,15 @@ const reducer = (state = initialState, action) => {
         ...state,
       };
     case LOAD_USER_SUCCESS:
+      if (action.me) {
+        return {
+          ...state,
+          me: action.data
+        }
+      }
       return {
         ...state,
-        me: action.data,
+        userInfo: action.data,
       };
     case LOAD_USER_FAILURE:
       return {

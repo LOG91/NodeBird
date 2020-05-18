@@ -10,7 +10,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { user, me } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
-  console.log(mainPosts);
+
   useEffect(() => {
     dispatch({
       type: LOAD_MAIN_POSTS_REQUEST,
@@ -24,7 +24,7 @@ const Home = () => {
         <PostForm />}
       {mainPosts.map((c) => {
         return (
-          <PostCard key={c.User.id} post={c} />
+          <PostCard key={c.id} post={c} />
         )
       })}
     </div>
