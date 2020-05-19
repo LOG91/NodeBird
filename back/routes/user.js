@@ -3,11 +3,9 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const db = require('../models');
 const passport = require('passport');
+const { isLoggedIn } = require('./middleware');
 
 router.get('/', (req, res) => {
-  if (!req.user) {
-    return res.status(401).send('로그인이 필요합니다');
-  }
   const filteredUser = Object.assign({}, req.user.toJSON());
   delete filteredUser.password
   return res.json(filteredUser);
@@ -59,7 +57,7 @@ router.get('/:id', async (req, res, next) => {
         model: db.User,
         as: 'Followers',
         attributes: ['id'],
-      }
+      },
       ],
       attributes: ['id', 'nickname']
     })
@@ -67,7 +65,6 @@ router.get('/:id', async (req, res, next) => {
     jsonUser.Posts = jsonUser.Posts ? jsonUser.Posts.length : 0;
     jsonUser.Followings = jsonUser.Followings ? jsonUser.Followings.length : 0;
     jsonUser.Followers = jsonUser.Followers ? jsonUser.Followers.length : 0;
-    console.log(jsonUser, 12312312349012);
     res.json(jsonUser);
   } catch (e) {
     console.error(e);
@@ -136,7 +133,6 @@ router.delete('/:id/follower', (req, res) => {
 
 router.get('/:id/posts', async (req, res, next) => {
   try {
-    console.log(req.params.id, 9029340192049120);
     const posts = await db.Post.findAll({
       where: {
         UserId: parseInt(req.params.id, 10),
@@ -145,6 +141,9 @@ router.get('/:id/posts', async (req, res, next) => {
       include: [{
         model: db.User,
         attributes: ['id', 'nickname']
+      },
+      {
+        model: db.Image
       }]
     });
     res.json(posts);

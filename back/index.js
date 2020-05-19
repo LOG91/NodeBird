@@ -22,6 +22,7 @@ app.use(cors({
   origin: true,
   credentials: true,
 }));
+app.use('/', express.static('uploads'));
 app.use(morgan('dev'));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(expressSession({

@@ -30,27 +30,27 @@ export const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
 export const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
 export const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';
 
-const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
-const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
-const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 
-const REMOVE_IMAGE = 'REMOVE_IMAGE';
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
-const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
-const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
-const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
 
-const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
-const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
-const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
 
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-const ROAD_COMMENTS_REQUEST = 'ROAD_COMMENTS_REQUEST';
-const ROAD_COMMENTS_SUCCESS = 'ROAD_COMMENTS_SUCCESS';
-const ROAD_COMMENTS_FAILURE = 'ROAD_COMMENTS_FAILURE';
+export const LOAD_COMMENTS_REQUEST = 'LOAD_COMMENTS_REQUEST';
+export const LOAD_COMMENTS_SUCCESS = 'LOAD_COMMENTS_SUCCESS';
+export const LOAD_COMMENTS_FAILURE = 'LOAD_COMMENTS_FAILURE';
 
 const RETWEET_REQUEST = 'RETWEET_REQUEST';
 const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
@@ -71,6 +71,24 @@ export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case UPLOAD_IMAGES_REQUEST:
+      return {
+        ...state,
+      };
+    case UPLOAD_IMAGES_SUCCESS:
+      return {
+        ...state,
+        imagePaths: [...state.imagePaths, ...action.data],
+      };
+    case UPLOAD_IMAGES_FAILURE:
+      return {
+        ...state,
+      };
+    case REMOVE_IMAGE:
+      return {
+        ...state,
+        imagePaths: state.imagePaths.filter((v, i) => i !== action.index)
+      }
     case ADD_POST_REQUEST:
       return {
         ...state,
@@ -84,6 +102,7 @@ const reducer = (state = initialState, action) => {
         isAddingPost: false,
         mainPosts: [action.data, ...state.mainPosts],
         postAdded: true,
+        imagePaths: []
       };
     case ADD_POST_FAILURE:
       return {
@@ -120,6 +139,17 @@ const reducer = (state = initialState, action) => {
         addCommentErrorReason: action.error,
       };
 
+    case LOAD_COMMENTS_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
+      const post = state.mainPosts[postIndex];
+      const Comments = action.data.comments;
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Comments };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
     case LOAD_MAIN_POSTS_REQUEST:
     case LOAD_HASHTAG_POSTS_REQUEST:
     case LOAD_USER_POSTS_REQUEST:

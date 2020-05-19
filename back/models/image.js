@@ -1,18 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
   const Image = sequelize.define('Image', {
-    src: {
+    src: { // S3 저장
       type: DataTypes.STRING(200),
-      allowNull: false
+      allowNull: false,
     },
-  },
-    {
-      charset: 'utf8', // 한글 사용 가능
-      collate: 'utf8_general_ci',
-    });
-
+  }, {
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
+  });
   Image.associate = (db) => {
-    db.Image.belongsTo(db.Post); // hasMany의 반대쪽
-  }
-
+    db.Image.belongsTo(db.Post);
+  };
   return Image;
 };

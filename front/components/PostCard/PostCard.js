@@ -3,29 +3,38 @@ import Link from 'next/link';
 import { Card, Icon, Button, Avatar, Form, Input, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { ADD_COMMENT_REQUEST } from '../../reducers/post';
+import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST } from '../../reducers/post';
 
 const PostCard = ({ post }) => {
-  const [commentFormOpend, setCommentFormOpend] = useState(false);
+  const [commentFormOpened, setCommentFormOpened] = useState(false);
   const [commentText, setCommentText] = useState('');
   const { me } = useSelector(state => state.user);
   const { commentAdded, isAddingComment } = useSelector(state => state.post);
   const dispatch = useDispatch();
-
+  console.log(post, 223);
   const onToggleComment = useCallback(() => {
-    setCommentFormOpend(prev => !prev);
+    setCommentFormOpened(prev => !prev);
+    if (!commentFormOpened) {
+      dispatch({
+        type: LOAD_COMMENTS_REQUEST,
+        data: post.id,
+      });
+    }
   }, []);
 
   const onSubmitComment = useCallback((e) => {
     e.preventDefault();
-    if (!me) return alert('로그인이 필요합니다');
+    if (!me) {
+      return alert('로그인이 필요합니다.');
+    }
     return dispatch({
       type: ADD_COMMENT_REQUEST,
       data: {
         postId: post.id,
+        content: commentText,
       },
     });
-  }, [me && me.id]);
+  }, [me && me.id, commentText]);
 
   useEffect(() => {
     setCommentText('');
@@ -39,7 +48,7 @@ const PostCard = ({ post }) => {
     <div>
       <Card
         key={post.createdAt}
-        cover={post.img && <img alt="example" src={post.img} />}
+        cover={post.Images && <img alt="example" src={'http://localhost:3065/' + post.Images[0].src} />}
         actions={[
           <Icon type="retweet" key="retweet" />,
           <Icon type="heart" key="heart" />,
@@ -49,17 +58,17 @@ const PostCard = ({ post }) => {
         extra={<Button>팔로우</Button>}
       >
         <Card.Meta
-          avatar={<Link href={`/user/${post.User.id}`}><a><Avatar>{post.User.nickname[0]}</Avatar></a></Link>}
+          avatar={<Link href={{ pathname: '/user', query: { id: post.User.id } }} as={`/user/${post.User.id}`}><a><Avatar>{post.User.nickname[0]}</Avatar></a></Link>}
           title={post.User.nickname}
           description={<div>{post.content.split(/(#[^\s]+)/g).map(v => {
             if (v.match(/#[^\s]+/)) {
-              return (<Link href={`/hashtag/${v.slice(1)}`} key={v}><a>{v}</a></Link>)
+              return (<Link href={{ pathname: '/hashtag', query: { tag: v.slice(1) } }} as={`/hashtag/${v.slice(1)}`} key={v}><a>{v}</a></Link>)
             }
             return v;
           })}</div>}
         />
       </Card>
-      {commentFormOpend && (
+      {commentFormOpened && (
         <>
           <Form onSubmit={onSubmitComment} >
             <Form.Item>
