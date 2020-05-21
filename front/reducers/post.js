@@ -52,13 +52,13 @@ export const LOAD_COMMENTS_REQUEST = 'LOAD_COMMENTS_REQUEST';
 export const LOAD_COMMENTS_SUCCESS = 'LOAD_COMMENTS_SUCCESS';
 export const LOAD_COMMENTS_FAILURE = 'LOAD_COMMENTS_FAILURE';
 
-const RETWEET_REQUEST = 'RETWEET_REQUEST';
-const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
-const RETWEET_FAILURE = 'RETWEET_FAILURE';
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
-const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
-const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
-const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 // 포스트 수정 기능은 숙제!
 //
@@ -170,6 +170,63 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
       };
+
+    case LIKE_POST_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case LIKE_POST_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
+      const post = state.mainPosts[postIndex];
+      const Likers = [{ id: action.data.userId }, ...post.Likers];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Likers };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
+    case LIKE_POST_FAILURE:
+      return {
+        ...state,
+      };
+
+    case UNLIKE_POST_REQUEST:
+      return {
+        ...state,
+      };
+    case UNLIKE_POST_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
+      const post = state.mainPosts[postIndex];
+      const Likers = post.Likers.filter(v => v.id !== action.data.userId);
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Likers };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
+    case UNLIKE_POST_FAILURE:
+      return {
+        ...state,
+      };
+
+    case RETWEET_REQUEST:
+      return {
+        ...state,
+      };
+    case RETWEET_SUCCESS: {
+      return {
+        ...state,
+        mainPosts: [action.data, ...state.mainPosts]
+      };
+    }
+    case RETWEET_FAILURE:
+      return {
+        ...state,
+      };
+
     default:
       return state;
   }
